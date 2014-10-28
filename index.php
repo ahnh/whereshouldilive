@@ -16,13 +16,13 @@
 				var mapOptions = {
 					center: { lat: 43.70, lng: -79.388752},
 					zoom: 12,
-			        mapTypeId: google.maps.MapTypeId.TERRAIN,
+			        //mapTypeId: google.maps.MapTypeId.TERRAIN,
 			        mapTypeControl: false
 				};
 				var map = new google.maps.Map(document.getElementById('map-canvas'),
 				mapOptions);
 				//map.data.loadGeoJson('data/police_division_wgs84.geojson');
-				map.data.loadGeoJson('data/neighborhoods_wgs84.geojson');
+				map.data.loadGeoJson('data/map.geojson');
 				var featureStyle = {
 					fillColor: 'green',
 					strokeWeight: 0.5
@@ -37,7 +37,7 @@
 				map.data.addListener('click', function(event) {
 					var info = event.feature.getProperty('AREA_NAME');
 					infowindow.setContent("<div style='width:200px; text-align: center;'>"
-							+ event.feature.getProperty('AREA_NAME')+"</div>");
+							+ event.feature.getProperty('AREA_NAME')+"<br />"+event.feature.getProperty('AREA_MUNI')+"</div>");
 				    infowindow.setPosition(event.latLng);
 				    //infowindow.setOptions({pixelOffset: new google.maps.Size(0,-30)});
 					infowindow.open(map);
