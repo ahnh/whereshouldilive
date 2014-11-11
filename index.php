@@ -1,6 +1,6 @@
 <?php
 ini_set ( 'auto_detect_line_endings', TRUE );
-//$file = fopen ( "http://www.cbc.ca/toronto/features/crimemap/spreadsheets/assault.csv", "r" );
+$file = fopen ( "http://www.cbc.ca/toronto/features/crimemap/spreadsheets/assault.csv", "r" );
 //$file = fopen ( "http://www.cbc.ca/toronto/features/crimemap/spreadsheets/sexualassault.csv", "r" );
 //$file = fopen ( "http://www.cbc.ca/toronto/features/crimemap/spreadsheets/breakandenter.csv", "r" );
 //$file = fopen ( "http://www.cbc.ca/toronto/features/crimemap/spreadsheets/robbery.csv", "r" );
@@ -18,7 +18,24 @@ while ( ($row = fgetcsv ( $file )) !== FALSE ) {
 fclose ( $file );
 
 ini_set ( 'auto_detect_line_endings', FALSE );
-
+$conn = mysqli_connect ( "localhost", "root", "", "db190263_should" );
+for($x = 1; $x < count ( $data ); $x ++) {
+	if ($data[$x][1] && $data[$x][1] != "")
+	{
+		$query = "INSERT INTO db190263_should.area_type (name) VALUES(\"" . $data[$x][1]. "\");";
+		if ($conn->multi_query ( $query )) {
+			echo "New record created successfully<br />";
+			do {
+				if ($result = $conn->store_result ()) {
+					$result->free();
+				}
+			} while ( $conn->more_results () && $conn->next_result () );
+		} else {
+			echo "Error: " . $sql . "<br>" . $conn->error;
+		}
+	}
+}
+$conn->close ();
 ?>
 <!DOCTYPE html>
 <html>
@@ -186,9 +203,9 @@ html, body, #map-canvas {
 	}
 	google.maps.event.addDomListener(window, 'load', function () {
 		initialize();
-		setTimeout(function () {
+		/*setTimeout(function () {
 			calculate();
-		}, 1000);
+		}, 1000);*/
 	});
 
 </script>
